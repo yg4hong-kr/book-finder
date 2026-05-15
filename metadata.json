@@ -1,0 +1,6 @@
+{
+  "name": "Global Book Explorer",
+  "description": "Explore real books in your language with summaries and localized pricing. Search by author, genre, or direct title.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
