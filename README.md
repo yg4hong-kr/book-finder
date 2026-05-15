@@ -28,5 +28,27 @@
 - **AI**: Google Gemini 1.5 Flash (via @google/genai)
 - **Deployment**: Google Cloud Run
 
+## ⚠️ 배포 및 문제 해결 (Troubleshooting)
+
+배포 후 AI 기능(도서 추천, 검색)이 작동하지 않는다면 다음 사항을 확인하세요:
+
+1. **API 키 설정**: 이 앱은 서버 측에서 AI 기능을 처리합니다. 배포 환경의 환경 변수(Environment Variables)에 `GEMINI_API_KEY`라는 이름으로 [Google AI Studio](https://aistudio.google.com/)에서 발급받은 키를 등록해야 합니다.
+2. **AI Studio 내 배포 시**: 우측 **'Secrets'** 패널에서 `GEMINI_API_KEY`가 올바르게 입력되어 있는지 확인하세요.
+3. **외부 서버 배포 시**: 사용 중인 호스팅 서비스(Vercel, AWS, Cloud Run 등)의 관리자 페이지에서 환경 변수를 설정해야 합니다.
+
+## ☁️ Netlify 배포 가이드 (Netlify Deployment)
+
+이 앱은 **Netlify Functions**를 사용하여 백엔드(AI 기능)를 처리하도록 설정되어 있습니다.
+
+1.  **환경 변수 설정 (중요)**:
+    *   Netlify 프로젝트 **Site configuration > Environment variables**로 이동합니다.
+    *   `GEMINI_API_KEY`: Google AI Studio에서 복사한 API 키를 입력합니다.
+2.  **빌드 설정 확인**:
+    *   **Build command**: `npm run build`
+    *   **Publish directory**: `dist`
+    *   **Functions directory**: `netlify/functions` (함께 생성된 `netlify.toml`에 이미 설정되어 있습니다.)
+3.  **파일 구성**:
+    *   배포 시 루트에 있는 `netlify.toml` 파일이 포함되어야 `/api/*` 경로가 서버리스 함수로 올바르게 연결됩니다.
+
 ---
 **만든이**: 홍윤기 (Hong Yoon-gi)

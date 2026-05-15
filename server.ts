@@ -11,8 +11,11 @@ const PORT = 3000;
 
 app.use(express.json());
 
+// API Key Validation
+const API_KEY = process.env.GEMINI_API_KEY;
+
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+  apiKey: API_KEY && API_KEY !== "MY_GEMINI_API_KEY" ? API_KEY : "",
   httpOptions: {
     headers: {
       'User-Agent': 'aistudio-build',
@@ -22,6 +25,9 @@ const ai = new GoogleGenAI({
 
 // API Routes
 app.post("/api/recommend", async (req, res) => {
+  if (!API_KEY || API_KEY === "MY_GEMINI_API_KEY") {
+    return res.status(500).json({ error: "Gemini API Key is missing on the server. Please check environment variables." });
+  }
   const { genre, author, lang, age } = req.body;
   const isBestsellerMode = !author || author.trim() === "";
   
@@ -99,8 +105,12 @@ app.post("/api/search", async (req, res) => {
   }
 });
 
+export default app;
+
 // Vite middleware setup
 async function setupVite() {
+  if (process.env.NETLIFY) return; // Skip in Netlify environment
+  
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
